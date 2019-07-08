@@ -1,8 +1,10 @@
 Package: neotoma2tibble
-Title: Convert output from neotoma into tibbles
+Title: Convert neotoma output into tibbles
 Version: 0.0.0.9000
-Authors@R: person(c("Richard", "James"), "Telford", email = "richard.telford@uib.no", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Authors@R: person(c("Richard", "James"), "Telford", 
+                  email = "richard.telford@uib.no", role = c("aut", "cre"))
+Description: Converts the output of the neotoma package into tibbles for ease
+  of further analysis with tidyverse.
 URL: https://github.com/richardjtelford/neotoma2tibble
 BugReports: https://github.com/richardjtelford/neotoma2tibble/issues
 Depends: R (>= 3.4.4)
@@ -10,3 +12,6 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Suggests: testthat
+Imports: dplyr,
+    purrr
+RoxygenNote: 6.0.1
