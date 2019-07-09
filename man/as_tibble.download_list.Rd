@@ -10,5 +10,10 @@
 \item{x}{download_list}
 }
 \description{
-Convert download_list into a tibble
+Converts a download_list produced by \code{\link[neotoma]{get_download}} into a tibble. See \code{\link[neotoma]{get_download}} for more information on how to download data.
+}
+\examples{
+require("dplyr") 
+data(Hordaland)
+as_tibble(Hordaland)
 }

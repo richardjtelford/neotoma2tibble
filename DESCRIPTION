@@ -15,5 +15,7 @@ Suggests: testthat
 Imports: dplyr,
     purrr,
     neotoma,
-    tibble
+    tibble,
+    tidyr,
+    rlang
 RoxygenNote: 6.0.1

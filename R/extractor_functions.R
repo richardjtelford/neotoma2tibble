@@ -1,50 +1,34 @@
-#from get_download object
-#pull off counts, labdata sample.meta (chronologies)
-#make nested tibble
-#filter out unwanted stuff
-
-
-#get taxon list
-#get dataset metadata
-#calculate percent based on count sum
-
 #helper function to extract species counts
-#' @importFrom dplyr rownames_to_column filter left_join %>% as_tibble group_by 
+#' @importFrom dplyr filter left_join %>% as_tibble group_by mutate_all mutate
 #' @importFrom tibble rownames_to_column
 #' @importFrom tidyr nest gather
 #' @importFrom neotoma counts
+#' @importFrom rlang .data
 #' 
 
 #make thin pollen using correct column of taxon.list
 mk_thin_pollen <- function(x){
   counts <- counts(x)
-  taxon.list <- x$taxon.list
-  
+  taxon.list <- x$taxon.list %>% 
+    mutate_all(as.character)#convert columns from factor to avoid problems
+    
   #some datasets have duplicate taxon.names so use alias if it exists
   if(any(names(taxon.list) == "alias")){
     name_column <- "alias"
-    #avoid character/name clash in join
-    taxon.list["alias"] <- as.character(taxon.list["alias"] )
   } else {
     name_column <- "taxon.name"
   }
-
-  #avoid character/name clash in join
-  taxon.list["taxon.name"] <- as.character(taxon.list["taxon.name"] )
-  
-
-  
   
   thin_pollen <- counts %>%
     rownames_to_column(var = "sample.id") %>% 
-    mutate(sample.id = as.integer(sample.id)) %>% 
-    gather(key = taxa, value = count, -sample.id) %>% 
-    filter(count > 0) %>% 
+    mutate(sample.id = as.integer(.data$sample.id)) %>% 
+    gather(key = "taxa", value = "count", -.data$sample.id) %>% 
+    filter(.data$count > 0) %>% 
     left_join(taxon.list, by = c("taxa" = name_column)) %>% 
     # 
     # #filter pollen/spores/ascospores - no charcoal in the counts 
     # filter(variable.element %in% c("pollen", "spores", "ascospore")) %>% 
-    group_by(sample.id) %>% 
+    group_by(.data$sample.id) %>% 
     nest()
   return(thin_pollen)
 }
@@ -52,7 +36,9 @@ mk_thin_pollen <- function(x){
 
 ################
 #helper functions to extract sample.meta, chronologies or lab.data
-#' @importFrom dplyr gather rownames_to_column filter left_join %>% as_tibble
+#' @importFrom dplyr filter left_join %>% as_tibble
+#' @importFrom tibble rownames_to_column
+#' @importFrom tidyr gather
 
 #extract sample.meta 
 extract_sample_meta <- function(x){
