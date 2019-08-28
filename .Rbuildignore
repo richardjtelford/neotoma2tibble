@@ -1,2 +1,4 @@
 ^data-raw$
 ^neotoma2tibble.Rproj$
+^.*\.Rproj$
+^\.Rproj\.user$
